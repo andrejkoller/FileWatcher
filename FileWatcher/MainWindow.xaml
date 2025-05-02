@@ -6,21 +6,42 @@
         xmlns:local="clr-namespace:FileWatcher"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
+            <!--First Row -->
             <RowDefinition Height="1*" />
-            <RowDefinition Height="5" />
+            <!-- Gap -->
+            <RowDefinition Height="10" />
+            <!--Second Row -->
             <RowDefinition Height="10*" />
+            <!-- Gap -->
             <RowDefinition Height="5" />
+            <!--Third Row -->
             <RowDefinition Height="1*" />
-            <RowDefinition Height="5" />
+            <!-- Gap -->
+            <RowDefinition Height="10" />
+            <!-- Fourth Row -->
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
+            <!-- First Column -->
             <ColumnDefinition Width="1*" />
+            <!-- Gap -->
             <ColumnDefinition Width="5" />
+            <!--Second Column-->
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
+
+        <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0" Grid.ColumnSpan="3">
+            <TextBox x:Name="PathTextBox" TextChanged="PathTextBox_TextChanged" Text="Please enter a directory path" FontSize="14" />
+        </Border>
+
+        <Border BorderThickness="1" BorderBrush="Black" Padding="5" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="3">
+            <TextBlock x:Name="StatusText" Text="Status: Ready" FontSize="14" />
+        </Border>
+
+        <Button x:Name="StartButton" Content="Start" Click="StartButton_Click" Grid.Row="6" Grid.Column="0" />
+        <Button x:Name="StopButton" Content="Stop" Click="StopButton_Click" IsEnabled="False" Grid.Row="6" Grid.Column="2" />
     </Grid>
 </Window>
