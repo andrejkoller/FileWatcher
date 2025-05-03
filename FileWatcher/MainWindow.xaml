@@ -5,56 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileWatcher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1200">
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <!--First Row -->
             <RowDefinition Height="1*" />
-            <!-- Gap -->
             <RowDefinition Height="10" />
-            <!--Second Row -->
             <RowDefinition Height="1*" />
-            <!-- Gap -->
             <RowDefinition Height="10" />
-            <!--Third Row -->
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="10*" />
-            <!-- Gap -->
             <RowDefinition Height="10" />
-            <!--Fourth Row -->
             <RowDefinition Height="1*" />
-            <!-- Gap -->
             <RowDefinition Height="10" />
-            <!-- Fifth Row -->
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <!-- First Column -->
             <ColumnDefinition Width="1*" />
-            <!-- Gap -->
             <ColumnDefinition Width="5" />
-            <!--Second Column-->
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Path TextBox -->
-        <Border BorderThickness="1" BorderBrush="Black" Grid.Row="0" Grid.ColumnSpan="3">
-            <TextBox x:Name="PathTextBox" TextChanged="PathTextBox_TextChanged" Text="Please enter a directory path" FontSize="14" />
+        <TextBox x:Name="PathTextBox" TextChanged="PathTextBox_TextChanged" Text="Enter a directory path" Foreground="Black" Background="White" FontSize="16" Grid.Row="0" Grid.ColumnSpan="3" />
+
+        <ComboBox x:Name="FileTypeComboBox" SelectionChanged="FileTypeComboBox_SelectionChanged" IsEnabled="False" FontSize="16" Foreground="Black" Background="White" Grid.Row="2" Grid.Column="0" />
+
+        <CheckBox x:Name="IncludeSubdirectoriesCheckbox" Content="Include Subdirectories" IsChecked="False" Checked="IncludeSubdirectoriesCheckbox_Checked" Unchecked="IncludeSubdirectoriesCheckbox_Unchecked" IsEnabled="False" Grid.Row="0" Grid.Column="4" />
+
+        <Border BorderThickness="1" BorderBrush="Gray" Background="White" Padding="5" Grid.Row="4" Grid.RowSpan="5" Grid.ColumnSpan="5">
+            <ScrollViewer Grid.Row="4" Grid.RowSpan="5" Grid.ColumnSpan="5">
+                <StackPanel x:Name="StatusPanel" />
+            </ScrollViewer>
         </Border>
 
-        <!-- File Type ComboBox -->
-        <ComboBox x:Name="FileTypeComboBox" SelectionChanged="FileTypeComboBox_SelectionChanged" IsEnabled="False" Grid.Row="2" Grid.Column="0" />
-
-        <!-- Include Subdirectories CheckBox -->
-        <CheckBox x:Name="IncludeSubdirectoriesCheckbox" Content="Include Subdirectories" IsChecked="False" Checked="IncludeSubdirectoriesCheckbox_Checked" Unchecked="IncludeSubdirectoriesCheckbox_Unchecked" IsEnabled="False" Grid.Row="2" Grid.Column="2" />
-
-        <!-- Status Output TextBlock -->
-        <Border BorderThickness="1" BorderBrush="Black" Padding="5" Grid.Row="4" Grid.RowSpan="2" Grid.ColumnSpan="3">
-            <TextBlock x:Name="StatusText" FontSize="14" />
-        </Border>
-
-        <!-- Start & Stop Button -->
-        <Button x:Name="StartButton" Content="Start" Click="StartButton_Click" Grid.Row="8" Grid.Column="0" />
-        <Button x:Name="StopButton" Content="Stop" Click="StopButton_Click" IsEnabled="False" Grid.Row="8" Grid.Column="2" />
+        <Button x:Name="StartButton" Content="Start" Click="StartButton_Click" Grid.Row="10" Grid.Column="0" />
+        <Button x:Name="StopButton" Content="Stop" Click="StopButton_Click" IsEnabled="False" Grid.Row="10" Grid.Column="2" />
+        <Button x:Name="SettingsButton" Content="Settings" Click="SettingsButton_Click" Grid.Row="10" Grid.Column="4" />
     </Grid>
 </Window>

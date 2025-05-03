@@ -47,7 +47,7 @@ namespace FileWatcher
             }
             catch (Exception ex)
             {
-                StatusText.Text = $"Error initializing watcher: {ex.Message}";
+                LogStatus($"Error initializing watcher: {ex.Message}", Brushes.Red);
                 DisposeFileWatcher();
             }
         }
@@ -64,72 +64,88 @@ namespace FileWatcher
 
         private void OnFileChanged(object sender, FileSystemEventArgs e)
         {
-            if (isFileTypeSupported(e.FullPath, _supportedExtensions))
+            if (IsFileTypeSupported(e.FullPath, _supportedExtensions))
             {
                 Dispatcher.Invoke(() =>
                 {
-                    var message = $"{e.ChangeType} file: {e.FullPath}\n";
-                    StatusText.Text += message;
+                    var message = $"{e.ChangeType} file: {e.FullPath}";
+                    LogStatus(message, Brushes.Black);
                 });
             }
         }
 
         private void OnFileRenamed(object sender, RenamedEventArgs e)
         {
-            if (isFileTypeSupported(e.FullPath, _supportedExtensions))
+            if (IsFileTypeSupported(e.FullPath, _supportedExtensions))
             {
                 Dispatcher.Invoke(() =>
                 {
-                    var message = $"Renamed file: {e.OldFullPath} to {e.FullPath}\n";
-                    StatusText.Text += message;
+                    var message = $"Renamed file: {e.OldFullPath} to {e.FullPath}";
+                    LogStatus(message, Brushes.Black);
                 });
             }
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!Directory.Exists(PathTextBox.Text))
-            {
-                StatusText.Text += "Cannot start watcher. Invalid directory path.\n";
-                return;
-            }
+            if (!TryValidatePath()) return;
 
-            CreateFileTypeComboBox(sender, e);
+            SetUIState(isWatching: true);
+            if (FileTypeComboBox.Items.Count == 0)
+            {
+                CreateFileTypeComboBox(sender, e);
+            }
             InitializeFileWatcher();
-            StartButton.IsEnabled = false;
-            StopButton.IsEnabled = true;
-            IncludeSubdirectoriesCheckbox.IsEnabled = true;
-            FileTypeComboBox.IsEnabled = true;
-            StatusText.Text += "Watcher started.\n";
-            StatusText.Text += "Listening for changes...\n";
+
+            LogStatus($"Watcher started successfully.\nListening for changes...", Brushes.Green);
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
+            SetUIState(isWatching: false);
             DeleteFileTypeComboBoxItems(sender, e);
             DisposeFileWatcher();
-            StopButton.IsEnabled = false;
-            StartButton.IsEnabled = true;
-            IncludeSubdirectoriesCheckbox.IsEnabled = false;
-            FileTypeComboBox.IsEnabled = false;
-            StatusText.Text += "Watcher stopped.\n";
+
+            LogStatus("Watcher stopped.", Brushes.Green);
+        }
+
+        private bool TryValidatePath()
+        {
+            if (!Directory.Exists(PathTextBox.Text))
+            {
+                LogStatus("Cannot start watcher. Invalid directory path entered.", Brushes.Red);
+                return false;
+            }
+            return true;
+        }
+
+        private void SetUIState(bool isWatching)
+        {
+            StartButton.IsEnabled = !isWatching;
+            StopButton.IsEnabled = isWatching;
+            IncludeSubdirectoriesCheckbox.IsEnabled = isWatching;
+            FileTypeComboBox.IsEnabled = isWatching;
+            SettingsButton.IsEnabled = !isWatching;
         }
 
         private void PathTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(PathTextBox.Text))
+            if (StatusPanel is null)
             {
-                StatusText.Text += "Please enter a valid path.\n";
-            }
-            else if (!Directory.Exists(PathTextBox.Text) && StatusText != null)
-            {
-                StatusText.Text += "Invalid directory path.\n";
+                return;
             }
 
-            if (_watcher != null && StatusText != null)
+            if (Directory.Exists(PathTextBox.Text))
             {
-                _watcher.Path = PathTextBox.Text;
-                StatusText.Text += $"Path changed to: {PathTextBox.Text}\n";
+                if (_watcher != null)
+                {
+                    _watcher.Path = PathTextBox.Text;
+                    LogStatus($"Path set to: {PathTextBox.Text}", Brushes.Black);
+                }
+            }
+            else
+            {
+                LogStatus("Invalid directory path entered.", Brushes.Red);
             }
         }
 
@@ -138,7 +154,7 @@ namespace FileWatcher
             if (_watcher != null)
             {
                 _watcher.IncludeSubdirectories = true;
-                StatusText.Text += "Watching subdirectories.\n";
+                LogStatus("Subdirectories included.", Brushes.Black);
             }
         }
 
@@ -147,7 +163,7 @@ namespace FileWatcher
             if (_watcher != null)
             {
                 _watcher.IncludeSubdirectories = false;
-                StatusText.Text += "Not watching subdirectories.\n";
+                LogStatus("Subdirectories excluded.", Brushes.Black);
             }
         }
 
@@ -165,7 +181,7 @@ namespace FileWatcher
             FileTypeComboBox.Items.Clear();
         }
 
-        private bool isFileTypeSupported(string filePath, string[] extensions)
+        private bool IsFileTypeSupported(string filePath, string[] extensions)
         {
             var fileExtension = Path.GetExtension(filePath)?.ToLowerInvariant();
             return extensions.Contains(fileExtension);
@@ -175,22 +191,23 @@ namespace FileWatcher
         {
             if (_watcher != null && FileTypeComboBox.SelectedItem is ComboBoxItem selectedItem && selectedItem.Tag is not null)
             {
-                _watcher.Filter = selectedItem.Tag.ToString()!;
-                StatusText.Text += $"File type filter set to: {selectedItem.Content}\n";
+                _watcher.Filter = "*.*";
+                LogStatus($"File type filter set to: {selectedItem.Content}", Brushes.Black);
 
-                if (_watcher.Filter == "*.jpg;*.png;*.gif")
+                var tag = selectedItem.Tag.ToString();
+                if (tag == "*.jpg;*.png;*.gif")
                 {
                     _supportedExtensions = new[] { ".jpg", ".png", ".gif" };
                 }
-                else if (_watcher.Filter == "*.mp4;*.avi")
+                else if (tag == "*.mp4;*.avi")
                 {
                     _supportedExtensions = new[] { ".mp4", ".avi" };
                 }
-                else if (_watcher.Filter == "*.mp3;*.wav")
+                else if (tag == "*.mp3;*.wav")
                 {
                     _supportedExtensions = new[] { ".mp3", ".wav" };
                 }
-                else if (_watcher.Filter == "*.txt")
+                else if (tag == "*.txt")
                 {
                     _supportedExtensions = new[] { ".txt" };
                 }
@@ -199,6 +216,39 @@ namespace FileWatcher
                     _supportedExtensions = Array.Empty<string>();
                 }
             }
+        }
+
+        private void LogStatus(string message, Brush? foregroundColor = null)
+        {
+            if (StatusPanel is not null)
+            {
+                var textBlock = new TextBlock
+                {
+                    Text = $"{DateTime.Now:T} - {message}",
+                    Foreground = foregroundColor ?? Brushes.Black
+                };
+
+                StatusPanel.Children.Add(textBlock);
+
+                if (VisualTreeHelper.GetParent(StatusPanel) is ScrollViewer scrollViewer)
+                {
+                    scrollViewer.ScrollToEnd();
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("StatusPanel is not initialized.");
+            }
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow
+            {
+                Owner = this
+            };
+
+            settingsWindow.Show();
         }
     }
 }
