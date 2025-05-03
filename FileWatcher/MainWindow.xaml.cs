@@ -1,14 +1,8 @@
 ﻿using System.IO;
-using System.Text;
+using System.Security.AccessControl;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 
 namespace FileWatcher
@@ -89,6 +83,12 @@ namespace FileWatcher
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             if (!TryValidatePath()) return;
+
+            if (!HasAccessRights(PathTextBox.Text))
+            {
+                LogStatus("Cannot start watcher. Insufficient permissions.", Brushes.Red);
+                return;
+            }
 
             SetUIState(isWatching: true);
             if (FileTypeComboBox.Items.Count == 0)
@@ -181,7 +181,7 @@ namespace FileWatcher
             FileTypeComboBox.Items.Clear();
         }
 
-        private bool IsFileTypeSupported(string filePath, string[] extensions)
+        private static bool IsFileTypeSupported(string filePath, string[] extensions)
         {
             var fileExtension = Path.GetExtension(filePath)?.ToLowerInvariant();
             return extensions.Contains(fileExtension);
@@ -239,6 +239,29 @@ namespace FileWatcher
             {
                 throw new InvalidOperationException("StatusPanel is not initialized.");
             }
+        }
+
+        private static bool HasAccessRights(string path)
+        {
+            try
+            {
+                var directoryInfo = new DirectoryInfo(path);
+                var accessControl = directoryInfo.GetAccessControl();
+                var rules = accessControl.GetAccessRules(true, true, typeof(System.Security.Principal.NTAccount));
+                foreach (FileSystemAccessRule rule in rules)
+                {
+                    if ((rule.FileSystemRights & FileSystemRights.FullControl) == FileSystemRights.FullControl)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)

@@ -31,7 +31,7 @@
 
         <TextBox x:Name="PathTextBox" TextChanged="PathTextBox_TextChanged" Text="Enter a directory path" Foreground="Black" Background="White" FontSize="16" Grid.Row="0" Grid.ColumnSpan="3" />
 
-        <ComboBox x:Name="FileTypeComboBox" SelectionChanged="FileTypeComboBox_SelectionChanged" IsEnabled="False" FontSize="16" Foreground="Black" Background="White" Grid.Row="2" Grid.Column="0" />
+        <ComboBox x:Name="FileTypeComboBox" SelectionChanged="FileTypeComboBox_SelectionChanged" SelectedIndex="0" IsEnabled="False" FontSize="16" Foreground="Black" Background="White" Grid.Row="2" Grid.Column="0" />
 
         <CheckBox x:Name="IncludeSubdirectoriesCheckbox" Content="Include Subdirectories" IsChecked="False" Checked="IncludeSubdirectoriesCheckbox_Checked" Unchecked="IncludeSubdirectoriesCheckbox_Unchecked" IsEnabled="False" Grid.Row="0" Grid.Column="4" />
 
