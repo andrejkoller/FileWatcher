@@ -1,50 +1,79 @@
 ﻿<UserControl x:Class="FileWatcher.Views.WatcherInstancesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FileWatcher.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1200"
+             Foreground="#e0e0e0">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#56b6c2"/>
+            <Setter Property="Foreground" Value="#1e1e2e"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#3b8f99"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#2a2a3c"/>
+            <Setter Property="RowBackground" Value="#1e1e2e"/>
+            <Setter Property="AlternatingRowBackground" Value="#24243a"/>
+            <Setter Property="Foreground" Value="#e0e0e0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="ColumnHeaderStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#44475a"/>
+                        <Setter Property="Foreground" Value="#ffffff"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Padding" Value="10,4"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Border Background="#2a2a3c"
+                BorderBrush="#44475a"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="20">
+            <DataGrid x:Name="WatchersListView"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      ItemsSource="{Binding Watchers}"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      IsReadOnly="True">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
+                    <DataGridTextColumn Header="Filter" Binding="{Binding Filter}" Width="*"/>
+                    <DataGridTextColumn Header="Included Subdirectories" Binding="{Binding IncludeSubdirectories}" Width="*" />
+                    <DataGridTemplateColumn Header="Actions" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Remove" Click="RemoveButton_Click" Width="75" Height="30" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
     </Grid>
 </UserControl>

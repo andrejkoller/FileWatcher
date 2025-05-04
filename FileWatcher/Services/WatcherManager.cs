@@ -4,29 +4,31 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileWatcher.Models;
 
-namespace FileWatcher.Models
+namespace FileWatcher.Services
 {
-    public class WatcherOptions
+    public class WatcherManager
     {
-        public string Name { get; set; } = string.Empty;
-        public string Folder { get; set; } = string.Empty;
-        public string Filter { get; set; } = "*.*";
-        public bool IncludeSubdirectories { get; set; } = false;
-
-        public Dictionary<string, FileSystemWatcher> Watchers { get; set; } = new Dictionary<string, FileSystemWatcher>();
-
-        public string[] SupportedExtensions { get; set; } = [];
+        public List<Watcher> Watchers { get; set; } = [];
 
         public void AddWatcher(string name, FileSystemWatcher watcher)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Watcher name cannot be null or empty.", nameof(name));
 
-            if (Watchers.ContainsKey(name))
+            if (Watchers.Any(w => w.Name == name))
                 throw new InvalidOperationException($"A watcher with the name '{name}' already exists.");
 
-            Watchers[name] = watcher;
+            Watchers.Add(new Watcher
+            {
+                Id = Watchers.Count + 1,
+                Name = name,
+                Path = watcher.Path,
+                Filter = watcher.Filter,
+                IncludeSubdirectories = watcher.IncludeSubdirectories,
+                FileSystemWatcher = watcher
+            });
         }
 
         public void RemoveWatcher(string name)
@@ -34,12 +36,12 @@ namespace FileWatcher.Models
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Watcher name cannot be null or empty.", nameof(name));
 
-            if (!Watchers.ContainsKey(name))
+            var watcher = Watchers.FirstOrDefault(w => w.Name == name);
+            if (watcher == null)
                 throw new KeyNotFoundException($"No watcher found with the name '{name}'.");
 
-            Watchers[name].Dispose();
-
-            Watchers.Remove(name);
+            watcher.FileSystemWatcher.Dispose();
+            Watchers.Remove(watcher);
         }
     }
 }

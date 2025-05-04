@@ -3,69 +3,83 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FileWatcher.Views"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1200">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="1*" />
-        </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
+    <Border CornerRadius="12">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch">
 
-        <TextBlock Text="Name:" Foreground="Black" FontSize="16" Grid.Row="0" Grid.Column="0" />
-        <TextBox x:Name="NameTextBox" TextChanged="NameTextBox_TextChanged" Text="Default Name" Foreground="Black" Background="White" FontSize="16" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="9" />
+            <TextBlock Text="Watcher Settings" FontSize="20" FontWeight="Bold" Foreground="#ffffff" Margin="0 0 0 10"/>
 
-        <TextBlock Text="Folder:" Foreground="Black" FontSize="16" Grid.Row="2" Grid.Column="0" />
-        <TextBox x:Name="WatchFolderTextBox" TextChanged="WatchFolderTextBox_TextChanged" Text="Enter a directory path" Foreground="Black" Background="White" FontSize="16" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="7" />
-        <Button x:Name="OpenFolderButton" Content="Open Folder" Click="OpenFolderButton_Click" Grid.Row="2" Grid.Column="10" />
+            <!-- Name -->
+            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
+                <TextBlock Text="Watcher Name" Foreground="#e0e0e0" Margin="0 0 0 5"/>
+                <TextBox x:Name="NameTextBox"
+                         TextChanged="NameTextBox_TextChanged"
+                         Text="Default Name"
+                         Background="#1e1e2e"
+                         Foreground="#ffffff"
+                         BorderBrush="#44475a"
+                         Padding="6"/>
+            </StackPanel>
 
-        <TextBlock Text="File Type:" Foreground="Black" FontSize="16" Grid.Row="4" Grid.Column="0" />
-        <ComboBox x:Name="FileTypeComboBox" SelectionChanged="FileTypeComboBox_SelectionChanged" SelectedIndex="0" FontSize="16" Foreground="Black" Background="White" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="7" />
+            <!-- Folder Selection -->
+            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
+                <TextBlock Text="Watch Folder" Foreground="#e0e0e0" Margin="0 0 0 5"/>
+                <DockPanel Margin="0 0 0 10">
+                    <TextBox x:Name="WatchFolderTextBox"
+                             TextChanged="WatchFolderTextBox_TextChanged"
+                             Text="Enter a directory path"
+                             Background="#1e1e2e"
+                             Foreground="#ffffff"
+                             BorderBrush="#44475a"
+                             Padding="6"
+                             DockPanel.Dock="Left"
+                             Width="100"/>
+                    <Button x:Name="OpenFolderButton"
+                            Content="Browse"
+                            Click="OpenFolderButton_Click"
+                            Background="#56b6c2"
+                            Foreground="#1e1e2e"
+                            Padding="6,2"
+                            BorderBrush="#3b8f99"
+                            Width="80"
+                            HorizontalAlignment="Right"/>
+                </DockPanel>
+            </StackPanel>
 
-        <TextBlock Text="Include Subdirectories:" Foreground="Black" FontSize="16" Grid.Row="6" Grid.Column="0" />
-        <CheckBox x:Name="IncludeSubdirectoriesCheckbox" IsChecked="False" Checked="IncludeSubdirectoriesCheckbox_Checked" Unchecked="IncludeSubdirectoriesCheckbox_Unchecked" Grid.Row="6" Grid.Column="2" />
+            <!-- File Type -->
+            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
+                <TextBlock Text="File Type Filter" Foreground="#e0e0e0" Margin="0 0 0 5"/>
+                <ComboBox x:Name="FileTypeComboBox"
+                          SelectionChanged="FileTypeComboBox_SelectionChanged"
+                          SelectedIndex="0"
+                          Background="#1e1e2e"
+                          Foreground="#ffffff"
+                          BorderBrush="#44475a"
+                          Padding="6"/>
+            </StackPanel>
 
-        <Border BorderThickness="1" BorderBrush="Gray" Background="White" Padding="5" Grid.Row="8" Grid.RowSpan="13" Grid.ColumnSpan="11">
-            <ScrollViewer Grid.Row="4" Grid.RowSpan="5" Grid.ColumnSpan="5">
-                <StackPanel x:Name="StatusOptionsPanel" />
-            </ScrollViewer>
-        </Border>
+            <!-- Include Subdirectories -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 10">
+                <CheckBox x:Name="IncludeSubdirectoriesCheckbox"
+                          IsChecked="False"
+                          Checked="IncludeSubdirectoriesCheckbox_Checked"
+                          Unchecked="IncludeSubdirectoriesCheckbox_Unchecked"
+                          Foreground="#e0e0e0"/>
+                <TextBlock Text="Include Subdirectories" VerticalAlignment="Center" Foreground="#e0e0e0" Margin="10 0 0 0"/>
+            </StackPanel>
 
-        <Button x:Name="AddButton" Content="Add Watcher" Click="AddButton_Click" Grid.Row="23" Grid.Column="0" Grid.ColumnSpan="11" />
-    </Grid>
+            <!-- Add Button -->
+            <Button x:Name="AddButton"
+                    Content="Add Watcher"
+                    Click="AddButton_Click"
+                    Background="#4ecb71"
+                    Foreground="#1e1e2e"
+                    Padding="10"
+                    BorderBrush="#3fa35a"
+                    FontWeight="SemiBold"
+                    HorizontalAlignment="Stretch"/>
+        </StackPanel>
+    </Border>
 </UserControl>

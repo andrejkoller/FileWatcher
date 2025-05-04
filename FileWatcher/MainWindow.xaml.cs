@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using FileWatcher.Models;
+using FileWatcher.Services;
 using FileWatcher.Views;
 
 namespace FileWatcher
@@ -9,29 +10,30 @@ namespace FileWatcher
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly WatcherOptions _options = new WatcherOptions();
+        private readonly Watcher _watcher = new();
+        private readonly WatcherManager _watcherManager = new();
         public MainWindow()
         {
             InitializeComponent();
-            ContentArea.Content = new StatusOutputView(_options);
+            ContentArea.Content = new OptionsView(_watcher, _watcherManager);
             UpdateButtonStates();
         }
 
         private void StatusOutputButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new StatusOutputView(_options);
+            ContentArea.Content = new StatusOutputView(_watcherManager);
             UpdateButtonStates();
         }
 
         private void WatcherInstancesButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new WatcherInstancesView(_options);
+            ContentArea.Content = new WatcherInstancesView(_watcherManager);
             UpdateButtonStates();
         }
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentArea.Content = new OptionsView(_options);
+            ContentArea.Content = new OptionsView(_watcher, _watcherManager);
             UpdateButtonStates();
         }
 
