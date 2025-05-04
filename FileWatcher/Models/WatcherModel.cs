@@ -2,7 +2,7 @@
 
 namespace FileWatcher.Models
 {
-    public class Watcher
+    public class WatcherModel
     {
         public int Id { get; set; } = 1;
         public string Name { get; set; } = string.Empty;

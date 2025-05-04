@@ -4,19 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="1200">
+             d:DesignHeight="800" d:DesignWidth="1200">
 
     <Border CornerRadius="12">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch">
 
-            <TextBlock Text="Watcher Settings" FontSize="20" FontWeight="Bold" Foreground="#ffffff" Margin="0 0 0 10"/>
+            <TextBlock Text="Watcher Settings" FontSize="20" FontWeight="Bold" Foreground="#ffffff" Margin="0 0 0 20"/>
 
             <!-- Name -->
-            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
-                <TextBlock Text="Watcher Name" Foreground="#e0e0e0" Margin="0 0 0 5"/>
-                <TextBox x:Name="NameTextBox"
-                         TextChanged="NameTextBox_TextChanged"
-                         Text="Default Name"
+            <StackPanel Orientation="Vertical" Margin="0 0 0 20">
+                <TextBlock Text="Watcher Name" Foreground="#e0e0e0" Margin="0 0 0 10"/>
+                <TextBox Text="{Binding Watcher.Name, UpdateSourceTrigger=PropertyChanged}"
                          Background="#1e1e2e"
                          Foreground="#ffffff"
                          BorderBrush="#44475a"
@@ -24,56 +22,48 @@
             </StackPanel>
 
             <!-- Folder Selection -->
-            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
-                <TextBlock Text="Watch Folder" Foreground="#e0e0e0" Margin="0 0 0 5"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Watch Folder" Foreground="#e0e0e0" Margin="0 0 0 10"/>
                 <DockPanel Margin="0 0 0 10">
-                    <TextBox x:Name="WatchFolderTextBox"
-                             TextChanged="WatchFolderTextBox_TextChanged"
-                             Text="Enter a directory path"
+                    <TextBox Text="{Binding Watcher.Path, UpdateSourceTrigger=PropertyChanged}"
                              Background="#1e1e2e"
                              Foreground="#ffffff"
                              BorderBrush="#44475a"
-                             Padding="6"
-                             DockPanel.Dock="Left"
-                             Width="100"/>
-                    <Button x:Name="OpenFolderButton"
-                            Content="Browse"
-                            Click="OpenFolderButton_Click"
+                             Padding="6"/>
+                </DockPanel>
+                <Button Content="Browse"
+                            Command="{Binding SelectFolderCommand}"
                             Background="#56b6c2"
                             Foreground="#1e1e2e"
-                            Padding="6,2"
+                            Padding="6"
                             BorderBrush="#3b8f99"
                             Width="80"
                             HorizontalAlignment="Right"/>
-                </DockPanel>
             </StackPanel>
 
             <!-- File Type -->
-            <StackPanel Orientation="Vertical" Margin="0 0 0 10">
-                <TextBlock Text="File Type Filter" Foreground="#e0e0e0" Margin="0 0 0 5"/>
-                <ComboBox x:Name="FileTypeComboBox"
-                          SelectionChanged="FileTypeComboBox_SelectionChanged"
-                          SelectedIndex="0"
-                          Background="#1e1e2e"
-                          Foreground="#ffffff"
+            <StackPanel Orientation="Vertical" Margin="0 0 0 20">
+                <TextBlock Text="File Type Filter" Foreground="#e0e0e0" Margin="0 0 0 10"/>
+                <ComboBox ItemsSource="{Binding FileTypes}"
+                          SelectedItem="{Binding SelectedFileType}"
+                          DisplayMemberPath="Key"
+                          SelectedValuePath="Value"
+                          Foreground="#000000"
                           BorderBrush="#44475a"
                           Padding="6"/>
             </StackPanel>
 
             <!-- Include Subdirectories -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 10">
-                <CheckBox x:Name="IncludeSubdirectoriesCheckbox"
-                          IsChecked="False"
-                          Checked="IncludeSubdirectoriesCheckbox_Checked"
-                          Unchecked="IncludeSubdirectoriesCheckbox_Unchecked"
-                          Foreground="#e0e0e0"/>
-                <TextBlock Text="Include Subdirectories" VerticalAlignment="Center" Foreground="#e0e0e0" Margin="10 0 0 0"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0 0 0 20">
+                <CheckBox IsChecked="{Binding Watcher.IncludeSubdirectories}"
+                          Content="Include Subdirectories"
+                          Foreground="#e0e0e0"
+                          VerticalAlignment="Center"/>
             </StackPanel>
 
             <!-- Add Button -->
-            <Button x:Name="AddButton"
-                    Content="Add Watcher"
-                    Click="AddButton_Click"
+            <Button Content="Add Watcher"
+                    Command="{Binding AddWatcherCommand}"
                     Background="#4ecb71"
                     Foreground="#1e1e2e"
                     Padding="10"

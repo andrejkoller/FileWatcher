@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:FileWatcher.Views"
              mc:Ignorable="d"
-             d:DesignHeight="600" d:DesignWidth="1200"
+             d:DesignHeight="800" d:DesignWidth="1200"
              Foreground="#e0e0e0">
 
     <UserControl.Resources>
@@ -51,8 +51,7 @@
                 BorderThickness="1"
                 CornerRadius="10"
                 Padding="20">
-            <DataGrid x:Name="WatchersListView"
-                      AutoGenerateColumns="False"
+            <DataGrid AutoGenerateColumns="False"
                       HeadersVisibility="Column"
                       ItemsSource="{Binding Watchers}"
                       CanUserAddRows="False"
@@ -64,11 +63,16 @@
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                     <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*"/>
                     <DataGridTextColumn Header="Filter" Binding="{Binding Filter}" Width="*"/>
-                    <DataGridTextColumn Header="Included Subdirectories" Binding="{Binding IncludeSubdirectories}" Width="*" />
+                    <DataGridTextColumn Header="Included Subdirectories" Binding="{Binding IncludeSubdirectories}" 
+                                        Width="*" />
                     <DataGridTemplateColumn Header="Actions" Width="Auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="Remove" Click="RemoveButton_Click" Width="75" Height="30" />
+                                <Button Content="Remove" 
+                                        Command="{Binding DataContext.RemoveWatcherCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                        CommandParameter="{Binding}"
+                                        Width="75" 
+                                        Height="30" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

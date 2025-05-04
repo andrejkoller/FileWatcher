@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FileWatcher"
         mc:Ignorable="d"
         Title="File Watcher" 
-        Height="600" Width="1200"
+        Height="800" Width="1200"
         Background="#1e1e2e"
         Foreground="#e0e0e0"
         FontSize="16">
@@ -48,14 +48,14 @@
 
         <!-- Top Navigation Buttons -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
-            <Button x:Name="StatusOutputButton" Content="Output" Click="StatusOutputButton_Click"/>
-            <Button x:Name="WatcherInstancesButton" Content="Watchers" Click="WatcherInstancesButton_Click"/>
-            <Button x:Name="OptionsButton" Content="Options" Click="OptionsButton_Click"/>
+            <Button Content="Output" Command="{Binding ShowLogCommand}"/>
+            <Button Content="Watchers" Command="{Binding ShowWatchersCommand}"/>
+            <Button Content="Options" Command="{Binding ShowOptionsCommand}"/>
         </StackPanel>
 
         <!-- Dynamic Content Area -->
         <Border Grid.Row="1" Margin="0,20,0,0">
-            <ContentControl x:Name="ContentArea"/>
+            <ContentControl Content="{Binding CurrentView}"/>
         </Border>
     </Grid>
 </Window>
