@@ -1,6 +1,6 @@
 ## Short description
 
-A lightweight and efficient .NET application that monitors file system changes in real time. FileWatcher automatically detects created, modified, deleted, and renamed files within a selected directory and logs all events in a clean and structured way.
+A lightweight and efficient .NET and WPF application that monitors file system changes in real time. FileWatcher automatically detects created, modified, deleted, and renamed files within a selected directory and logs all events in a clean and structured way.
 
 ## ✨ Features
 
@@ -14,6 +14,7 @@ A lightweight and efficient .NET application that monitors file system changes i
 
 - .NET / C# – Core application logic
 - Visual Studio / .NET CLI – Development and build tools
+- WPF and XAML
 
 ## 📋 Prerequisites
 
